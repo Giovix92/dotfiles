@@ -87,6 +87,16 @@ else
 fi
 
 # Setup Git
+echo -n "- Setting up Git ... "
 git config --global user.name "Giovix92"
 git config --global user.email "ggualtierone@gmail.com"
 git config --global review.review.lineageos.org.username "Giovix92"
+echo "Done!"
+
+# Add the Gerrit Change-id hook - from https://github.com/SebaUbuntu/dotfiles/blob/master/setup.sh#L50
+echo -n "- Setting up Gerrit Change-Id hook ... "
+mkdir -p ~/.git/hooks
+git config --global core.hooksPath ~/.git/hooks
+cp commit-msg ~/.git/hooks/commit-msg
+chmod u+x ~/.git/hooks/commit-msg
+echo "Done!"
