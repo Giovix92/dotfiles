@@ -29,7 +29,7 @@ install_brew_packages() {
   for i in $@; do
     echo -n "- Installing $i ... "
     # Treat it as a non-cask package
-    brew install $i
+    brew install $i > /dev/null 2>&1
     if [ ! $? -eq 0 ]; then
       echo "Done!"
     else
@@ -42,7 +42,7 @@ install_brew_cask_packages() {
   for i in $@; do
     echo -n "- Installing $i ... "
     # Treat it as a cask package
-    brew install --cask $i
+    brew install --cask $i > /dev/null 2>&1
     if [ ! $? -eq 0 ]; then
       echo "Done!"
     else
@@ -51,6 +51,7 @@ install_brew_cask_packages() {
   done
 }
 
+export CI=1
 VERSION="1.0"
 echo "- Giovix92's dotfiles setup, v$VERSION."
 
@@ -73,7 +74,6 @@ echo "- Detected os: $OS_TYPE $OS_VER"
 
 if ! $IS_LINUX; then
   install_brew_prerequisites
-  exit
   if install_brew; then 
     echo "Installed!"
   else 
