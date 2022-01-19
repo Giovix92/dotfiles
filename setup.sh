@@ -83,8 +83,8 @@ if ! $IS_LINUX; then
     echo "Failed brew installation. Exiting."
     exit 1
   fi
-  install_brew_cask_packages google-chrome sublime-text anydesk visual-studio-code typora vmware-fusion discord whatsapp telegram-desktop microsoft-teams termius
-  install_brew_packages python@3.9 python@3.10 repo brotli dos2unix git openssl cmake htop automake unrar p7zip xz thefuck doxygen binutils zlob aria2 ffmpeg gnupg ngrep gcc protobuf ssh-copy-id e2fsprogs ext4fuse
+  install_brew_cask_packages google-chrome sublime-text anydesk visual-studio-code typora vmware-fusion discord whatsapp telegram-desktop microsoft-teams termius timemachineeditor
+  install_brew_packages python@3.9 python@3.10 repo brotli dos2unix git openssl cmake htop automake unrar p7zip xz thefuck doxygen binutils zlob aria2 ffmpeg gnupg ngrep gcc protobuf ssh-copy-id e2fsprogs ext4fuse pylint markdownlint-cli autopep8 jq logitech-g-hub
 else
   echo "TBD"
 fi
