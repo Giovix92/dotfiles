@@ -21,7 +21,10 @@ install_brew_prerequisites() {
 install_brew() {
   URL_BREW="https://raw.githubusercontent.com/Homebrew/install/master/install"
   echo -n "- Installing brew ... "
-  echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null 2&>1
+  wget -q https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+  chmod +x ./install.sh
+  ./install.sh > /dev/null
+  rm -rf install.*
   if [ $? -eq 0 ]; then return 0; else return 1; fi
 }
 
