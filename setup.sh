@@ -7,23 +7,25 @@ list="adb anydesk apktool deskreen discord fastboot freedownloadmanager g++-aarc
 		zram-config zsh"
 aliases=$(cat aliases)
 
-echo "- Setting up Git..."
+# Setting up git
 sudo apt install git -y
 git config --global user.name "Giovix92"
 git config --global user.email "ggualtierone@gmail.com"
 git config --global review.review.lineageos.org.username "Giovix92"
 
-echo "- Installing Android build binaries..."
+# Setting up android build env
 git clone https://github.com/akhilnarang/scripts
 bash scripts/setup/android_build_env.sh
 
-clear
-echo "- Installing personal programs..."
+# Install programs
 sudo apt install $list -y
 
-clear
-echo "- Adding custom zsh aliases..."
+# Add the Gerrit Change-id hook
+mkdir -p ~/.git/hooks
+git config --global core.hooksPath ~/.git/hooks
+curl -Lo ~/.git/hooks/commit-msg https://review.lineageos.org/tools/hooks/commit-msg
+chmod u+x ~/.git/hooks/commit-msg
+
+# Add custom zsh aliases
 chsh --shell /usr/bin/zsh
 echo $aliases >> /home/giovix92/.zshrc
-
-echo "- Done!"
