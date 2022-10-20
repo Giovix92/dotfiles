@@ -27,5 +27,5 @@ curl -Lo ~/.git/hooks/commit-msg https://review.lineageos.org/tools/hooks/commit
 chmod u+x ~/.git/hooks/commit-msg
 
 # Add custom zsh aliases
-chsh --shell /usr/bin/zsh
+sudo chsh --shell /usr/bin/zsh
 echo $aliases >> /home/giovix92/.zshrc
