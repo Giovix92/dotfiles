@@ -1,0 +1,12 @@
+#!/bin/bash
+current_profile=$(system76-power profile | grep "Power Profile" | awk '{print $3}')
+if [ $current_profile == "Battery" ]; then
+    system76-power profile balanced
+    zenity --info --text="Switched power profile to balanced!"
+elif [ $current_profile == "Balanced" ]; then
+    system76-power profile performance
+    zenity --info --text="Switched power profile to performance!"
+elif [ $current_profile == "Performance" ]; then
+    system76-power profile battery
+    zenity --info --text="Switched power profile to battery!"
+fi
