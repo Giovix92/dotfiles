@@ -5,3 +5,6 @@ export CCACHE_EXEC=/usr/bin/ccache
 
 # GPG Config
 export GPG_TTY=$(tty)
+
+# Custom aliases
+alias lineagepush="bash /home/giovix92/dotfiles/scripts/lineagepush"
