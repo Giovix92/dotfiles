@@ -8,3 +8,4 @@ export GPG_TTY=$(tty)
 
 # Custom aliases
 alias lineagepush="bash /home/giovix92/dotfiles/scripts/lineagepush"
+alias chg_pp="bash /home/giovix92/dotfiles/scripts/change_power_profile"
