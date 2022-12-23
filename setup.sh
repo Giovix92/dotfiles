@@ -1,31 +1,98 @@
 #!/bin/bash
 
-list="adb anydesk apktool deskreen discord fastboot freedownloadmanager g++-aarch64-linux-gnu gcc-aarch64-linux-gnu \
-		gdb-multiarch gnome-shell-extension-gsconnect gnome-tweaks google-chrome-stable gparted lm-sensors neofetch \
-		openjdk-17-jre openjdk-17-jdk openmpi-bin openmpi-common patchelf python2.7 python3-pip python3-tk python-is-python3 \
-		scenebuilder scrcpy screen snapd speedtest-cli squashfs-tools teamviewer telegram-desktop typora wireshark \
-		zram-config zsh"
-aliases=$(cat aliases)
+### Base ###
+menu() {
+	echo """
+╔═══════════════════════════╗
+║                           ║
+║ Giovix92's dotfiles setup ║
+║                           ║
+╚═══════════════════════════╝
+"""
+}
 
-# Setting up git
-sudo apt install git -y
-git config --global user.name "Giovix92"
-git config --global user.email "ggualtierone@gmail.com"
-git config --global review.review.lineageos.org.username "Giovix92"
+init() {
+	list=""
+}
 
-# Setting up android build env
-git clone https://github.com/akhilnarang/scripts
-bash scripts/setup/android_build_env.sh
+error() {
+	echo "[!!!] Something happened while setting up $1. Aborting."
+	exit 1
+}
 
-# Install programs
-sudo apt install $list -y
+### Various setups ###
+setup_anydesk() {
+	wget -qO- https://keys.anydesk.com/repos/DEB-GPG-KEY | gpg --dearmor > anydesk.gpg
+	sudo install -D -o root -g root -m 644 anydesk.gpg /etc/apt/keyrings/anydesk.gpg
+	sudo sh -c 'echo "deb [signed-by=/etc/apt/keyrings/anydesk.gpg] http://deb.anydesk.com/ all main" > /etc/apt/sources.list.d/anydesk-stable.list'
+	rm -f anydesk.gpg
+}
 
-# Add the Gerrit Change-id hook
-mkdir -p ~/.git/hooks
-git config --global core.hooksPath ~/.git/hooks
-curl -Lo ~/.git/hooks/commit-msg https://review.lineageos.org/tools/hooks/commit-msg
-chmod u+x ~/.git/hooks/commit-msg
+setup_vscode() {
+	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+	sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+	sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+	rm -f packages.microsoft.gpg
+	sudo apt install apt-transport-https
+}
 
-# Add custom zsh aliases
-sudo chsh --shell /usr/bin/zsh
-echo $aliases >> /home/giovix92/.zshrc
+setup_fdm() {
+	wget -q https://dn3.freedownloadmanager.org/6/latest/freedownloadmanager.deb
+	sudo apt install ./freedownloadmanager.deb
+	rm -f freedownloadmanager.deb
+	sudo apt-key export 093B2149 | sudo gpg --yes --dearmour -o /etc/apt/trusted.gpg.d/freedownloadmanager.gpg
+}
+
+setup_typora() {
+	wget -qO- https://typora.io/linux/public-key.asc | gpg --dearmor > typora.gpg
+	sudo install -D -o root -g root -m 644 typora.gpg /usr/share/keyrings/typora.gpg
+	sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/typora.gpg] https://typora.io/linux ./" > /etc/apt/sources.list.d/typora.list'
+	rm -f typora.gpg
+}
+
+setup_git() {
+	git config --global user.name "Giovix92"
+	git config --global user.email "ggualtierone@gmail.com"
+	git config --global review.review.lineageos.org.username "Giovix92"
+}
+
+setup_android_build_env() {
+	git clone https://github.com/akhilnarang/scripts tmp/
+	gnome-terminal --wait -- ./tmp/setup/android_build_env.sh
+	rm -rf tmp/
+}
+
+setup_apps() {
+	gnome-terminal --wait -- bash -c 'sudo apt update && sudo apt -f install $(cat app_list) -y'
+}
+
+setup_gerrit_changeid_hook() {
+	[ -d ~/.git/hooks ] && return 0
+	mkdir -p ~/.git/hooks
+	git config --global core.hooksPath ~/.git/hooks
+	curl -Lo ~/.git/hooks/commit-msg https://review.lineageos.org/tools/hooks/commit-msg
+	chmod u+x ~/.git/hooks/commit-msg
+}
+
+extras() {
+	cp aliases ~/.bash_aliases
+
+	# Prevent Windows time shifting
+	timedatectl set-local-rtc 1
+}
+
+clear
+init
+menu
+echo "[i] Setting up AnyDesk..."; setup_anydesk > /dev/null 2>&1 || error "AnyDesk"
+echo "[i] Setting up VSCode..."; setup_vscode > /dev/null 2>&1 || error "VSCode"
+echo "[i] Setting up FDM..."; setup_fdm > /dev/null 2>&1 || error "FDM"
+echo "[i] Setting up Typora..."; setup_typora > /dev/null 2>&1 || error "Typora"
+echo "[i] Setting up Git..."; setup_git > /dev/null 2>&1 || error "Git"
+echo "[i] Setting up Android build env..."; setup_android_build_env > /dev/null 2>&1 || error "android build env"
+echo "[i] Setting up Apps..."; setup_apps > /dev/null 2>&1 || error "apps"
+echo "[i] Setting up Gerrit changeid hook..."; setup_gerrit_changeid_hook > /dev/null 2>&1 || error "Gerrit changeid hook"
+echo "[i] Finishing..."; extras || error "extras"
+
+read -p "[i] Finished! Press a key to exit."
+exit
