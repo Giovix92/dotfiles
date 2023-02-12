@@ -79,6 +79,9 @@ extras() {
 
 	# Prevent Windows time shifting
 	timedatectl set-local-rtc 1
+
+	# HACK: Set gnome-remote-desktop screen sharing mode to extend
+	gsettings set org.gnome.desktop.remote-desktop.rdp screen-share-mode extend
 }
 
 clear
