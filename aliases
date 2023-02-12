@@ -9,3 +9,6 @@ export GPG_TTY=$(tty)
 # Custom aliases
 alias lineagepush="bash /home/giovix92/dotfiles/scripts/lineagepush"
 alias chg_pp="bash /home/giovix92/dotfiles/scripts/change_power_profile"
+alias fastrs="repo sync -c --force-sync --no-tags --no-clone-bundle -j$(nproc --all) --optimized-fetch --prune"
+alias diff_txt="bash /home/giovix92/dotfiles/scripts/diff_txt"
+alias switchfanmode="bash /home/giovix92/dotfiles/scripts/switchfanmode"

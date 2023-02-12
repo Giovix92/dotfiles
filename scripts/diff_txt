@@ -1,0 +1,48 @@
+#!/bin/bash
+
+declare -a txt1
+declare -a txt2
+declare -a diff1
+declare -a diff2
+found=false
+
+readarray -t txt1 < $1
+readarray -t txt2 < $2
+
+for i in "${txt1[@]}"; do
+    found=false
+    for j in "${txt2[@]}"; do
+        if [ "$i" == "$j" ]; then 
+            found=true
+            break
+        fi
+    done
+
+    if [ $found = false ]; then
+        diff1[${#diff1[@]}]=$i
+    fi
+done
+
+for i in "${txt2[@]}"; do
+    found=false
+    for j in "${txt1[@]}"; do
+        if [ "$i" == "$j" ]; then 
+            found=true
+            break
+        fi
+    done
+
+    if [ $found = false ]; then
+        diff2[${#diff2[@]}]=$i
+    fi
+done
+
+echo "From $1 to $2: "
+for i in "${diff1[@]}"; do
+    echo $i
+done
+
+echo "From $2 to $1: "
+for i in "${diff2[@]}"; do
+    echo $i
+done

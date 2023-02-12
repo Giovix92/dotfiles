@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# Author: Giovix92 <giovix92@giovix92.com>
+# Changes fan mode (max/auto) in HP Omen systems
+# Description: This scripts imitates what Omen Gaming Hub does with fans:
+#                - Auto mode (basically PWM), whose value is 2
+#                - Max mode (fans going at full speed), whose value is 0
+#              All of this can be done by altering the value of pwm1_enable.
+#              NOTE: superuser rights are required.
+# Date: 12/02/2023, 11:50am
+
+# Shows a message with zenity if using GNOME, otherwise just a plain echo inside terminal.
+message() {
+  fan_mode=""
+  [ "$1" == "0" ] && fan_mode="max" || fan_mode="auto"
+  msg="Switched fan mode to $fan_mode!"
+  [ "$(which zenity)" != "" ] && zenity --info --text="$msg" || echo "$msg"
+}
+
+error() {
+  [ "$(which zenity)" != "" ] && zenity --error --text="$1" || echo "$1"
+  exit 1
+}
+
+# Root check
+[ "$(id -u)" != "0" ] && exec sudo /bin/bash "$0" "$@"
+
+# Path existence check
+path="/sys/devices/platform/hp-wmi/hwmon/hwmon6/pwm1_enable"
+[ -w "$path" ] || error "This is not a supported platform! Exiting."
+
+# Current value check
+current_val=$(cat $path)
+set_val=""
+[ "$current_val" == "0" ] && set_val=2 || set_val=0
+
+# Changing fan mode
+echo $set_val > $path || error "There was an error while changing the fan mode. Aborting."
+message $set_val
