@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+# Original author: SebaUbuntu <seba@sebaubuntu.dev>
+# Description: Helper for review.lineageos.org.
+# Date: 20/10/22, 1:15pm
+#
 
 USER="Giovix92"
 SERVER="review.lineageos.org"

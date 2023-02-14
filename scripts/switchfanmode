@@ -8,6 +8,7 @@
 #              All of this can be done by altering the value of pwm1_enable.
 #              NOTE: superuser rights are required.
 # Date: 12/02/2023, 11:50am
+#
 
 # Shows a message with zenity if using GNOME, otherwise just a plain echo inside terminal.
 message() {
@@ -17,6 +18,7 @@ message() {
   [ "$(which zenity)" != "" ] && zenity --info --text="$msg" || echo "$msg"
 }
 
+# Same behavior as message, but in an error format, and exits afterwards.
 error() {
   [ "$(which zenity)" != "" ] && zenity --error --text="$1" || echo "$1"
   exit 1

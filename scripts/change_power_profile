@@ -1,5 +1,14 @@
 #!/bin/bash
+#
+# Author: Giovix92 <giovix92@giovix92.com>
+# Changes power profile on-the-fly
+# Description: This script helps in changing the power profile from the terminal/keyboard shortcut,
+#              mimicking the "Performance/Balanced" shortcut found in some laptops, such as my HP.
+# Date: 20/10/2022, 1:15pm
+#
+
 current_profile=$(system76-power profile | grep "Power Profile" | awk '{print $3}')
+
 if [ $current_profile == "Battery" ]; then
     system76-power profile balanced
     zenity --info --text="Switched power profile to balanced!"
