@@ -82,6 +82,16 @@ extras() {
 
 	# HACK: Set gnome-remote-desktop screen sharing mode to extend
 	gsettings set org.gnome.desktop.remote-desktop.rdp screen-share-mode extend
+
+	# HACK: Use OMEN key as fan switching shortcut.
+	# See https://github.com/Giovix92/dotfiles/blob/master/scripts/switchfanmode.
+	# Also, let it run as sudo.
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "OMEN Key"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "bash /home/giovix92/dotfiles/scripts/switchfanmode"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "XF86Launch2"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+
+	[ ! -f "/etc/sudoers.d/switchfanmode" ] && echo "giovix92 ALL = NOPASSWD: /bin/bash /home/giovix92/dotfiles/scripts/switchfanmode" | sudo tee /etc/sudoers.d/switchfanmode
 }
 
 clear
