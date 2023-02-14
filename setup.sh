@@ -80,7 +80,8 @@ extras() {
 	# Prevent Windows time shifting
 	timedatectl set-local-rtc 1
 
-	# HACK: Set gnome-remote-desktop screen sharing mode to extend
+	# HACK: Enable gnome-remote-desktop screen sharing mode, and set screen-share-mode to extend.
+	gsettings set org.gnome.desktop.remote-desktop.rdp enable true
 	gsettings set org.gnome.desktop.remote-desktop.rdp screen-share-mode extend
 
 	# HACK: Use OMEN key as fan switching shortcut.
